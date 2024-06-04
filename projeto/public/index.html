@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Tarefas</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <script
+      src="https://unpkg.com/htmx.org@1.9.12"
+      integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+      crossorigin="anonymous"
+    ></script>
+    <script src="scripts.js" defer></script>
+  </head>
+  <body
+    hx-get="/api/todos"
+    hx-trigger="load"
+    hx-target="#todo-list"
+    hx-swap="innerHTML"
+  >
+    <div class="container">
+      <h1 class="mt-5">Lista de Tarefas</h1>
+      <div class="mb-3">
+        <form class="form-inline">
+          <label for="search" class="mr-2">Buscar:</label>
+          <input
+            id="search"
+            name="search"
+            type="text"
+            class="form-control"
+            placeholder="Buscar tarefas"
+            hx-post="/api/search"
+            hx-trigger="keyup changed delay:500ms"
+            hx-target="#todo-list"
+            hx-swap="innerHTML"
+            hx-params="*"
+          />
+        </form>
+      </div>
+      <form
+        id="todo-form"
+        class="mb-3"
+        hx-post="/api/todos"
+        hx-target="#todo-list"
+        hx-swap="beforeend"
+        hx-on::after-request="this.reset()"
+      >
+        <div class="input-group">
+          <input
+            type="text"
+            id="title"
+            name="title"
+            class="form-control"
+            placeholder="Nova Tarefa"
+            required
+          />
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Adicionar</button>
+          </div>
+        </div>
+      </form>
+      <ul id="todo-list" class="list-group">
+        <!-- Itens da To-Do List serão inseridos aqui -->
+      </ul>
+    </div>
+  </body>
+</html>
